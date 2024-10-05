@@ -1,0 +1,35 @@
+@startuml
+start
+:Cliente envía solicitud con coordenadas (source, destination);
+:recibe solicitud;
+
+if (Latitud y Longitud válidas?) then (Sí)
+    :Validar unidad de medida;
+    if (Unidad de medida válida?) then (Sí)
+        if (Unidad en blanco?) then (Sí)
+            :Usar km por defecto;
+        endif
+        :Calcular distancia (km o nautical);
+        :Preparar respuesta;
+        :envía respuesta con la distancia y unidad;
+    else (No)
+        :Unidad de medida inválida;
+        :distance -1, unit 'invalid';
+    endif
+else (No)
+    if (Latitud fuera de rango?) then (Sí)
+        :Lanzar ValueError (Latitud fuera de rango);
+        :distance -1, unit 'invalid';
+    endif
+    if (Longitud fuera de rango?) then (Sí)
+        :Lanzar ValueError (Longitud fuera de rango);
+        :distance -1, unit 'invalid';
+    endif
+    if (Ambas fuera de rango?) then (Sí)
+        :Lanzar ValueError (Ambas coordenadas fuera de rango);
+        :distance -1, unit 'invalid';
+    endif
+endif
+
+stop
+@enduml
